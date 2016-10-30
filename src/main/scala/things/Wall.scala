@@ -12,7 +12,7 @@ trait Wall extends Thing {
     val v = mov.vel(dir)
     val dist = if (p < 0) p - mov.pos(dir) + mov.r else p - mov.pos(dir) - mov.r
     val timeToHit = if (v == 0) Double.PositiveInfinity else dist / v
-    if (timeToHit <= 0) Double.PositiveInfinity else 0.99999 * timeToHit //todo remover 999999 e ver se quebra
+    if (timeToHit <= 0) Double.PositiveInfinity else timeToHit
   }
 }
 
