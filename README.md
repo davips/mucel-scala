@@ -1,10 +1,9 @@
-# mucel-scala
+# mucel
 Minimalist multicellular simulator.
 
 Install
 =======
 Mucel can be run in Intellij IDEA or directly by SBT.
-These instructions were tested on Debian Jessie.
 The first common step is to clone this repository.
 ```bash
 git clone https://github.com/davips/mucel-scala
@@ -18,7 +17,8 @@ Run the Main.scala file (Ctrl+Shift+F10).
 
 SBT
 ---
-Install SBT
+Install [SBT](http://www.scala-sbt.org/index.html).
+Or, for Debian Jessie and similar distros:
 ```bash
 echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823
@@ -26,7 +26,7 @@ sudo apt-get update
 sudo apt-get install sbt
 ```
 
-Run mucel-scala
+Run mucel:
 ```bash
 cd mucel-scala
 sbt run
