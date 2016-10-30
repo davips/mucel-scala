@@ -12,7 +12,7 @@ object Phy {
     } yield Hit(x, y, timeTo(x, y, sameOrg = false))
     val tmin = hits.minBy(_.t).t
     hits filter (_.t == tmin)
-  } else Seq(Hit(a, b, timeTo(a.bubble, b.bubble, sameOrg = false)))
+  } else Seq(Hit(a, b, timeTo(a.bubble, b.bubble, sameOrg = false), bubbleHit = true))
 
   def timeTo(t1: Thing, t2: Thing, sameOrg: Boolean = true): Double = (t1, t2) match {
     case (movable: Movable, wall: Wall) => wall.timeTo(movable)

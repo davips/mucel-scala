@@ -3,7 +3,7 @@ package calc
 import breeze.linalg.{DenseVector, norm}
 import things._
 
-case class Hit(a: Thing, b: Thing, t: Double) {
+case class Hit(a: Thing, b: Thing, t: Double, bubbleHit:Boolean=false) {
   def run(): Unit = (a, b) match {
     case (org: Org, _: HWall) => org.bubble.vel(1) *= -1
     case (org: Org, _: VWall) => org.bubble.vel(0) *= -1
