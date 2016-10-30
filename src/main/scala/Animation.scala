@@ -5,7 +5,7 @@ import java.io.{File, IOException}
 import javax.imageio.ImageIO
 import javax.swing.JPanel
 
-import things.{HWall, Org, VWall, Wall}
+import things._
 
 import scala.util.Random
 
@@ -27,31 +27,26 @@ case class Animation(var dt: Double, sizex: Int, sizey: Int, world: World) exten
   }
 
   def bubble(g: Graphics2D)(x: Double, y: Double, r: Double) {
-    val el = new Ellipse2D.Double(x + sizex / 2 - r, y + sizey / 2 - r, 2 * r, 2 * r)
-    //    el.
-    g.draw(el)
+    g.draw(new Ellipse2D.Double(x + sizex / 2 - r, y + sizey / 2 - r, 2 * r, 2 * r))
   }
 
-  def drao(g: Graphics2D)(org: Org): Unit = {
-    //    val (x, y, _, r) = org.getxyvr
-    //    g.setColor(new Color(255, 0, 0))
-    //    bubble(g)(x, y, 1.5 * r)
+  def draw(g: Graphics2D)(t: Thing): Unit = t match {
+    case (org: Org) =>
+      //    val (x, y, _, r) = org.getxyvr
+      //    g.setColor(new Color(255, 0, 0))
+      //    bubble(g)(x, y, 1.5 * r)
 
-//    val (xb, yb, _, rb) = org.bubble.getxyvr
-//    g.setColor(new Color(255, 255, 255))
-//    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.01f))
-//    ball(g)(xb, yb, rb)
-//    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f))
+      //    val (xb, yb, _, rb) = org.bubble.getxyvr
+      //    g.setColor(new Color(255, 255, 255))
+      //    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.01f))
+      //    ball(g)(xb, yb, rb)
+      //    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f))
 
-    org.cells.zipWithIndex foreach { case (c, i) =>
-      val (x, y, _, r) = c.getxyvr
-      g.setColor(new Color(0, 0, ((i.toDouble / org.cells.length) * 127 + 128).round.toInt)) //new Random(c.id).nextInt(255)
-      ball(g)(x, y, r)
-    }
-  }
-
-  def draw(g: Graphics2D)(wall: Wall): Unit = wall match {
-    //    case Chain(balls) => balls foreach evolve(g)(dt)
+      org.cells.zipWithIndex foreach { case (c, i) =>
+        val (x, y, _, r) = c.getxyvr
+        g.setColor(new Color(0, 0, ((i.toDouble / org.cells.length) * 127 + 128).round.toInt)) //new Random(c.id).nextInt(255)
+        ball(g)(x, y, r)
+      }
     case HWall(y) =>
       g.setColor(new Color(255, 0, 255))
       g.setStroke(new BasicStroke(3f))
@@ -68,8 +63,7 @@ case class Animation(var dt: Double, sizex: Int, sizey: Int, world: World) exten
     g.setColor(Color.BLACK)
     g.fillRect(0, 0, canvas.getWidth, canvas.getHeight)
     g.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON)
-    world.orgs foreach drao(g)
-    world.walls foreach draw(g)
+    world.orgs ++ world.walls foreach draw(g)
     g.dispose()
     //  javax.imageio.ImageIO.write(canvas, "png", new java.io.File("drawing.png"))
     G.drawImage(canvas, 0, 0, this)
