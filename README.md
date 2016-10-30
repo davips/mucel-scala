@@ -10,6 +10,13 @@ sudo apt-get update
 sudo apt-get install sbt
 ```
 
+Clone this repository
+---------------------
+```bash
+git clone https://github.com/davips/mucel-scala
+cd mucel-scala
+```
+
 Run mucel-scala
 ---------------
 ```bash
