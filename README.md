@@ -1,7 +1,11 @@
-mucel-scala
-===========
+# mucel-scala
+Minimalist multicellular simulator.
+
+Install
+=======
 Mucel can be run in Intellij IDEA or directly by SBT.
-The first step is to clone this repository.
+These instructions were tested on Debian Jessie.
+The first common step is to clone this repository.
 ```bash
 git clone https://github.com/davips/mucel-scala
 ```
@@ -27,3 +31,23 @@ Run mucel-scala
 cd mucel-scala
 sbt run
 ```
+Features / To do list
+=====================
+* [x] 2D particle collision simulator
+* [x] visualize according to real elapsed time
+* [x] exact preemptory collision calculation
+* [ ] rigid bodies
+* [ ] rotation
+* [ ] different types of cells
+       * [x] structure
+       * [ ] sensor
+       * [ ] bulb
+       * [ ] motor
+       * [ ] wire
+* [ ] reproduction
+* [ ] mov. quantity proportional to area
+* [ ] friction?
+* [ ] mobile version
+* [ ] distributed version
+* [ ] GPU headless version
+* [ ] 3D version?
