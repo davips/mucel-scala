@@ -5,7 +5,7 @@ import java.awt.{AlphaComposite, Color, Graphics2D}
 import breeze.linalg.{DenseVector, min}
 import calc.{Hit, Phy}
 
-case class Org(id: Int, x: Double, y: Double, r: Double, cells: Seq[Cell], walls: Seq[Wall] = Seq()) extends Movable {
+case class Org(id: Int, x: Double, y: Double, r: Double, cells: Seq[Cell], walls: Seq[Wall] = Seq(), intersect:Boolean=true) extends Movable {
   val bubble = Cell(Int.MinValue, DenseVector(x, y), zero, r, solid = false, wire = false, sensor = false, motor = false)
   val all = bubble +: cells
   lazy val (pos, vel) = (meanpos(all), resultantvel)
@@ -14,7 +14,7 @@ case class Org(id: Int, x: Double, y: Double, r: Double, cells: Seq[Cell], walls
 
   def nextHit(orgs: Seq[Org]) = {
     val pairHits = orgs flatMap (org => if (this.id < org.id) Phy.nextHit(this, org) else Seq())
-    val internalHits = for {a <- all; b <- cells; if a.id < b.id} yield Hit(a, b, Phy.timeTo(a, b))
+    val internalHits = for {a <- all; b <- cells; if a.id < b.id} yield Hit(a, b, Phy.timeTo(a, b, intersect=intersect))
     val wallHits = for {w <- walls} yield Hit(this, w, Phy.timeTo(bubble, w))
     val allHits = pairHits ++ internalHits ++ wallHits
     val tmin = allHits.minBy(_.t).t
@@ -36,7 +36,7 @@ case class Org(id: Int, x: Double, y: Double, r: Double, cells: Seq[Cell], walls
     val (xb, yb, _, rb) = bubble.getxyvr
     g.setColor(new Color(255, 255, 255))
     g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.05f))
-    ball(g)(xb, yb, rb)
+    bubble(g)(xb, yb, rb)
     g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f))
 
     cells foreach (_.draw(g))

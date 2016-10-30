@@ -24,10 +24,11 @@ object Factory {
     Cell(id, pos, vel, r, so, wi, se, mo)
   }
 
-  def newOrg(rnd: Random, walls: Seq[Wall])(id: Int) = {
-    val r = Cfg.maxPos * math.sqrt(2) + Cfg.maxRad + 1
+  def newOrg(rnd: Random, walls: Seq[Wall], intersect: Boolean = true)(id: Int) = {
+    val r = Cfg.maxPos * math.sqrt(2) + Cfg.maxRad + 10
     val (x, y) = (Cfg.frameWidth - 2 * r) * (rnd.nextDouble - 0.5) -> (Cfg.frameHeight - 2 * r) * (rnd.nextDouble - 0.5)
     def nc(id: Int) = newCell(rnd)(id, x, y)
-    Org(id, x, y, r, (1 to Cfg.ncells) map nc, walls)
+    def ncells = rnd.nextInt(Cfg.maxCells - Cfg.minCells) + Cfg.minCells
+    Org(id, x, y, r, (1 to ncells) map nc, walls, intersect)
   }
 }

@@ -1,6 +1,6 @@
 package calc
 
-import breeze.linalg.{max, min}
+import breeze.linalg.min
 import data.Cfg
 import things.{Org, Wall}
 

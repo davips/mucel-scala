@@ -1,8 +1,6 @@
 package things
 
-import java.awt.{BasicStroke, Color, Graphics, Graphics2D}
-
-import view.Paint
+import java.awt.{BasicStroke, Color, Graphics2D}
 
 trait Wall extends Thing {
   val p: Double
