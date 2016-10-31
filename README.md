@@ -38,7 +38,7 @@ Features / To do list
 * [x] exact preemptory collision calculation
 * [x] each organism cells grouped inside an ivisible bubble
 * [ ] organize each organism cells in some way to avoid n\*n tests
-* [ ] different types of cells
+* [x] different types of cells
        * [x] solid
        * [ ] sensor
        * [ ] bulb

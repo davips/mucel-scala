@@ -21,7 +21,9 @@ object Factory {
     r *= Cfg.maxRad - Cfg.minRad
     r += Cfg.minRad
     val (so, wi, se, mo) = (rnd.nextBoolean, rnd.nextBoolean, rnd.nextBoolean, rnd.nextBoolean)
-    Cell(id, pos, vel, r, so, wi, se, mo)
+    val cell = Cell(id, pos, vel, r, so, wi, se, mo)
+    cell.energized = rnd.nextBoolean()
+    cell
   }
 
   def newOrg(rnd: Random, walls: Seq[Wall], intersect: Boolean = true)(id: Int) = {
