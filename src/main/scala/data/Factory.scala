@@ -1,7 +1,7 @@
 package data
 
 import breeze.linalg.DenseVector
-import things.{Cell, Org, Wall}
+import things._
 
 import scala.util.Random
 
@@ -20,14 +20,14 @@ object Factory {
     var r = rnd.nextDouble()
     r *= Cfg.maxRad - Cfg.minRad
     r += Cfg.minRad
-    val (so, wi, se, mo) = (rnd.nextBoolean, rnd.nextBoolean, rnd.nextBoolean, rnd.nextBoolean)
-    val cell = Cell(id, pos, vel, r, so, wi, se, mo)
-    cell.energized = rnd.nextBoolean()
+    val (so, ty) = rnd.nextBoolean -> rnd.shuffle(Seq.fill(6)(Isolant()) ++ Seq.fill(4)(Wire()) ++ Seq.fill(10)(Sensor()) :+ Motor()).head
+    val cell = Cell(id, pos, vel, r, so, ty)
+    cell.energized = ty == Sensor() && rnd.nextBoolean()
     cell
   }
 
-  def newOrg(rnd: Random, walls: Seq[Wall], intersect: Boolean = true)(id: Int) = {
-    val r = Cfg.maxPos * math.sqrt(2) + Cfg.maxRad + 10
+  def newOrg(rnd: Random, walls: Seq[Wall], intersect: Boolean = true, scale: Double = 1)(id: Int) = {
+    val r = scale * (Cfg.maxPos * math.sqrt(2) + Cfg.maxRad + 10)
     val (x, y) = (Cfg.frameWidth - 2 * r) * (rnd.nextDouble - 0.5) -> (Cfg.frameHeight - 2 * r) * (rnd.nextDouble - 0.5)
     def nc(id: Int) = newCell(rnd)(id, x, y)
     def ncells = rnd.nextInt(Cfg.maxCells - Cfg.minCells) + Cfg.minCells

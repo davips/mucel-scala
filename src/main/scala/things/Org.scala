@@ -6,7 +6,7 @@ import breeze.linalg.{DenseVector, min}
 import calc.{Hit, Phy}
 
 case class Org(id: Int, x: Double, y: Double, r: Double, cells: Seq[Cell], walls: Seq[Wall] = Seq(), intersect:Boolean=true) extends Movable {
-  val bubble = Cell(Int.MinValue, DenseVector(x, y), zero, r, solid = false, wire = false, sensor = false, motor = false)
+  val bubble = Cell(Int.MinValue, DenseVector(x, y), zero, r, solid = false, null)
   val all = bubble +: cells
   lazy val (pos, vel) = (meanpos(all), resultantvel)
 
