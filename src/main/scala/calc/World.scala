@@ -4,12 +4,14 @@ import breeze.linalg.min
 import breeze.numerics.{abs, sqrt}
 import data.Cfg
 import things._
-import view.Paint
 
 case class World(walls: Seq[Wall], orgs: Seq[Org]) {
   val bulbs = orgs.filter(_.cells.exists(_.typ == Bulb())).map(_.cells.head)
   val sensors = orgs.flatMap(_.cells.filter(_.typ == Sensor()))
-  lazy val blockers = ??? // orgs.filter(_.cells.exists(c => c.solid && c.typ != Bulb() && c.typ != Sensor()))
+
+  def blockers = orgs.map { o =>
+    (o.bubble.x, o.bubble.y, o.bubble.r) -> o.cells.filter(c => c.solid && c.typ != Bulb() && c.typ != Sensor())
+  }.filter(_._2.nonEmpty)
 
   def distLineToPoint(x1: Double, y1: Double, x2: Double, y2: Double)(x0: Double, y0: Double) = {
     val y21 = y2 - y1
@@ -17,9 +19,15 @@ case class World(walls: Seq[Wall], orgs: Seq[Org]) {
     abs(y21 * x0 - x21 * y0 + x2 * y1 - y2 * x1) / sqrt(y21 * y21 + x21 * x21)
   }
 
+  def between(x: Double, a: Double, b: Double) = (x - a) * (x - b) < 0
+
+  def between2d(c: Cell, a: Cell, b: Cell) = between(c.x, a.x, b.x) && between(c.y, a.y, b.y)
+
   def blocked(a: Cell, b: Cell) = {
-    val distTo = distLineToPoint(a.pos(0), a.pos(1), b.pos(0), b.pos(1)) _
-    false
+    val distTo = distLineToPoint(a.x, a.y, b.x, b.y) _
+    blockers.filter { case ((x, y, r), cells) => distTo(x, y) <= r }.exists { case ((x, y, r), cells) =>
+      cells.exists(c => distTo(c.x, c.y) < c.r && between2d(c, a, b))
+    }
   }
 
   def advance(dt: Double): Unit = {
@@ -31,10 +39,15 @@ case class World(walls: Seq[Wall], orgs: Seq[Org]) {
       if (t < dt) {
         allHits.par.filter(x => !x.bubbleHit && x.t == tmin) foreach (_.run())
         advance(dt - t)
-      } else //time quantum completed (usually 1/30 i.e. 30fps)
+      } else {
+        //time quantum completed (usually 1/30 i.e. 30fps)
         for {bulb <- bulbs; sensor <- sensors} {
-          if (!blocked(sensor, bulb)) bulb.lineTo(sensor)
+          if (!blocked(sensor, bulb)) {
+            bulb.lineTo(sensor)
+            sensor.energized = true
+          }
         }
+      }
     }
   }
 }
