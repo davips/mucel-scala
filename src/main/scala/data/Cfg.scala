@@ -1,5 +1,6 @@
 package data
 
+import breeze.linalg.DenseVector
 import calc.World
 import things._
 
@@ -16,7 +17,9 @@ object Cfg {
   val (minPos, maxPos) = (-70d, 70d)
   val (minVel, maxVel) = (-12d, 12d)
   val (minRad, maxRad) = (9d, 20d)
-
   val walls = Seq(HWall(Cfg.frameHeight / 2d), HWall(-Cfg.frameHeight / 2d), VWall(Cfg.frameWidth / 2d), VWall(-Cfg.frameWidth / 2d))
-  val world = World(walls, (1 to Cfg.norgs) map (id => Factory.newOrg(rnd, walls, intersect = false, 1)(id)))
+  val orgs = (1 to Cfg.norgs) map (id => Factory.newOrg(rnd, walls, intersect = false, 1)(id))
+  val world = World(walls, Factory.newBulb(walls) +: orgs)
+
+  def zero = DenseVector[Double](0, 0)
 }

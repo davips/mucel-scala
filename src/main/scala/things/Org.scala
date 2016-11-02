@@ -4,13 +4,12 @@ import java.awt.{AlphaComposite, Color, Graphics2D}
 
 import breeze.linalg.{DenseVector, min}
 import calc.{Hit, Phy}
+import data.Cfg
 
 case class Org(id: Int, x: Double, y: Double, r: Double, cells: Seq[Cell], walls: Seq[Wall] = Seq(), intersect:Boolean=true) extends Movable {
-  val bubble = Cell(Int.MinValue, DenseVector(x, y), zero, r, solid = false, null)
+  val bubble = Cell(Int.MinValue, DenseVector(x, y), Cfg.zero, r, solid = false, null)
   val all = bubble +: cells
   lazy val (pos, vel) = (meanpos(all), resultantvel)
-
-  def zero = DenseVector[Double](0, 0)
 
   def nextHit(orgs: Seq[Org]) = {
     val pairHits = orgs flatMap (org => if (this.id < org.id) Phy.nextHit(this, org) else Seq())

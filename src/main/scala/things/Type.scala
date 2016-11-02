@@ -9,3 +9,5 @@ case class Motor() extends Type
 case class Sensor() extends Type
 
 case class Isolant() extends Type
+
+case class Bulb(permanent: Boolean = true) extends Type

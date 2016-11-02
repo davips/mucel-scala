@@ -29,13 +29,15 @@ case class Cell(id: Int, pos: DenseVector[Double], vel: DenseVector[Double], r: 
       0 -> 255 //((id.toDouble / Cfg.maxCells) * 127 + 128).round.toInt
     } else 20 -> 255 //((id.toDouble / Cfg.maxCells) * 127 + 128).round.toInt
     def rndLevel = Random.nextInt(intens)
+    val dim = (255 * (((System.currentTimeMillis() % 1000) / 500d) - 1).abs).round.toInt
     val color = this match {
       case _ if this.energized => new Color(rndLevel, rndLevel, rndLevel)
       case Cell(_, _, _, _, _, Motor()) => new Color(intens, lev, lev)
       case Cell(_, _, _, _, _, Wire()) => new Color(lev, intens, lev)
       case Cell(_, _, _, _, _, Sensor()) => new Color(lev, lev, intens)
       case Cell(_, _, _, _, _, Isolant()) => new Color(intens / 2, lev, intens / 2)
-      case _ => ???; Color.WHITE
+      case Cell(_, _, _, _, _, Bulb(_)) => new Color(dim, dim, 0)
+      case _ => ???
     }
     g.setColor(color)
     ball(g)(x, y, r)

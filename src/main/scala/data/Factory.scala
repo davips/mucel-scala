@@ -26,6 +26,10 @@ object Factory {
     cell
   }
 
+  def newBulb(walls: Seq[Wall], x: Double = 0, y: Double = 0, r: Double = 5) = {
+    Org(Int.MinValue, x, y, 2 * r, Seq(Cell(1, DenseVector(x, y), Cfg.zero, r, solid = true, Bulb())), walls)
+  }
+
   def newOrg(rnd: Random, walls: Seq[Wall], intersect: Boolean = true, scale: Double = 1)(id: Int) = {
     val r = scale * (Cfg.maxPos * math.sqrt(2) + Cfg.maxRad + 10)
     val (x, y) = (Cfg.frameWidth - 2 * r) * (rnd.nextDouble - 0.5) -> (Cfg.frameHeight - 2 * r) * (rnd.nextDouble - 0.5)
