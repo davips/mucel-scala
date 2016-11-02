@@ -1,17 +1,23 @@
 package things
 
-import java.awt.geom.Ellipse2D
-import java.awt.{AlphaComposite, Color, Graphics2D}
+import java.awt.geom.{Ellipse2D, Line2D}
+import java.awt.{AlphaComposite, BasicStroke, Color, Graphics2D}
 import javafx.scene.paint
 
 import breeze.linalg.{DenseVector, norm}
 import data.Cfg
 
+import scala.collection.mutable
 import scala.util.Random
 
 
 case class Cell(id: Int, pos: DenseVector[Double], vel: DenseVector[Double], r: Double, solid: Boolean, typ: Type) extends Movable {
   var energized = false
+  var lines = mutable.Queue[Line2D](new Line2D.Double(0 + sizex / 2, 0 + sizey / 2, 100 + sizex / 2, 100 + sizey / 2))
+
+  def lineTo(other: Cell): Unit = {
+    lines += lineObj(pos(0), pos(1), other.pos(0), other.pos(1))
+  }
 
   def walk(dt: Double) {
     pos += dt * vel
@@ -23,6 +29,13 @@ case class Cell(id: Int, pos: DenseVector[Double], vel: DenseVector[Double], r: 
   }
 
   def draw(g: Graphics2D) {
+    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f))
+    g.setColor(new Color(255, 255, 0))
+    g.setStroke(new BasicStroke(3f))
+    lines foreach line2(g)
+    lines.clear()
+    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f))
+
     val (x, y, _, r) = getxyvr
     val (lev, intens) = if (!solid) {
       g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.07f))
