@@ -29,9 +29,10 @@ case class Cell(id: Int, pos: DenseVector[Double], vel: DenseVector[Double], r: 
   }
 
   def draw(g: Graphics2D) {
-    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f))
-    g.setColor(new Color(255, 255, 0))
-    g.setStroke(new BasicStroke(3f))
+    val dim = (200 * (((System.currentTimeMillis() % 2000) / 1000d) - 1).abs).round.toInt
+    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f))
+    g.setColor(new Color(55+dim, 55+dim, 0))
+    g.setStroke(new BasicStroke(1f))
     lines foreach line2(g)
     lines.clear()
     g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f))
@@ -42,14 +43,13 @@ case class Cell(id: Int, pos: DenseVector[Double], vel: DenseVector[Double], r: 
       0 -> 255 //((id.toDouble / Cfg.maxCells) * 127 + 128).round.toInt
     } else 20 -> 255 //((id.toDouble / Cfg.maxCells) * 127 + 128).round.toInt
     def rndLevel = Random.nextInt(intens)
-    val dim = (255 * (((System.currentTimeMillis() % 1000) / 500d) - 1).abs).round.toInt
     val color = this match {
       case _ if this.energized => new Color(rndLevel, rndLevel, rndLevel)
       case Cell(_, _, _, _, _, Motor()) => new Color(intens, lev, lev)
       case Cell(_, _, _, _, _, Wire()) => new Color(lev, intens, lev)
       case Cell(_, _, _, _, _, Sensor()) => new Color(lev, lev, intens)
       case Cell(_, _, _, _, _, Isolant()) => new Color(intens / 2, lev, intens / 2)
-      case Cell(_, _, _, _, _, Bulb(_)) => new Color(dim, dim, 0)
+      case Cell(_, _, _, _, _, Bulb(_)) => new Color(255-dim, 255-dim, 0)
       case _ => ???
     }
     g.setColor(color)
