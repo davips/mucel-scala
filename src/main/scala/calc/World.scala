@@ -23,8 +23,8 @@ case class World(walls: Seq[Wall], orgs: Seq[Org]) {
   //
   //  def between2d(c: Cell, a: Cell, b: Cell) = between(c.x, a.x, b.x) && between(c.y, a.y, b.y)
   def between(c: Cell, a: Cell, b: Cell) = {
-    val ac = a.pos-c.pos
-    val bc = b.pos -c.pos
+    val ac = a.pos - c.pos
+    val bc = b.pos - c.pos
     ac.dot(bc) < 0
   }
 
@@ -37,22 +37,19 @@ case class World(walls: Seq[Wall], orgs: Seq[Org]) {
 
   def advance(dt: Double): Unit = {
     val allHits = orgs.par flatMap (_.nextHit(orgs))
-    if (allHits.nonEmpty) {
+    val quantumCompleted = if (allHits.nonEmpty) {
       val tmin = allHits.par.minBy(_.t).t
       val t = min((1 - Cfg.verySmall) * tmin, dt)
       orgs.par foreach (_.walk(t))
       if (t < dt) {
         allHits.par.filter(x => !x.bubbleHit && x.t == tmin) foreach (_.run())
         advance(dt - t)
-      } else {
-        //time quantum completed (usually 1/30 i.e. 30fps)
-        for {bulb <- bulbs; sensor <- sensors} {
-          if (!blocked(sensor, bulb)) {
-            bulb.lineTo(sensor)
-            sensor.energized = true
-          }
-        }
-      }
+        false
+      } else true
+    } else false
+    if (quantumCompleted) for {bulb <- bulbs; sensor <- sensors} if (!blocked(sensor, bulb)) {
+      bulb.lineTo(sensor)
+      sensor.energized = true
     }
   }
 }
