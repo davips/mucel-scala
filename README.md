@@ -1,5 +1,8 @@
 # mucel
 Minimalist multicellular simulator.
+The idea is similar to the Game Of Life, i.e. a minimal set of rules sufficient to generate life-like behavior.
+In the present case, the world is also 2D but not discrete.
+ 
 
 Install
 =======
@@ -36,23 +39,29 @@ Features / To do list
 * [x] 2D particle collision simulator
 * [x] visualization according to real elapsed time
 * [x] exact preemptory collision calculation
-* [x] each organism cells grouped inside an ivisible bubble
-* [ ] organize each organism cells in some way to avoid n\*n tests
-* [x] different types of cells
-       * [x] solid
-       * [ ] sensor
-       * [ ] bulb
-       * [ ] motor
-       * [ ] wire
-* [ ] energy dissipation on hit
-* [ ] reproduction
+* [x] each organism cells grouped inside an invisible bubble
+* [x] different types of cells: 
+       * [x] sensor, bulb, motor, wire
+       * [x] ghost (only for internal collisions)
+       * [ ] cell eater?
+       * [ ] hit absorver?
+       * [ ] separate Sun and bulb concepts 
+* [x] sample organisms:
+       * [x] planarian (runs from light)
+       * [ ] moth (guided by light)
+       * [ ] flea (runs towards light)
+* [ ] reproduction (how to combine organisms? through a "reproduction gate"?)
+* [ ] improve plausibility of friction
 * [ ] organism editor
-* [ ] friction
+* [ ] energy dissipation on hit? (where does the heat go?)
 * [x] improve performance
        * [x] parallelize
+       * [ ] organize each organism cells in some way to avoid n\*n tests
        * [ ] optimize by caching or avoiding redundant calculations
+* [x] versions
+       * [ ] desktop
+       * [ ] server headless       
        * [ ] distributed
-       * [ ] GPU headless
-* [ ] other versions
+       * [ ] GPU headless       
        * [ ] mobile
        * [ ] 3D
