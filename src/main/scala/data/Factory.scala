@@ -41,11 +41,11 @@ object Factory {
 
   val r = 15
 
-  def isol(id: Int, x: Double, y: Double) = Cell(id, DenseVector(x, y), DenseVector(-50, 10), 0.95 * r, solid = true, Isolant())
+  def isol(id: Int, x: Double, y: Double) = Cell(id, DenseVector(x, y), DenseVector(-50, 10), 0.98 * r, solid = true, Isolant())
 
-  def sens(id: Int, x: Double, y: Double) = Cell(id, DenseVector(x, y), DenseVector(1, -100), 0.95 * r, solid = true, Sensor())
+  def sens(id: Int, x: Double, y: Double) = Cell(id, DenseVector(x, y), DenseVector(1, -100), 0.98 * r, solid = true, Sensor())
 
-  def moto(id: Int, x: Double, y: Double) = Cell(id, DenseVector(x, y), DenseVector(-100, -100), 0.95 * r, solid = true, Motor())
+  def moto(id: Int, x: Double, y: Double) = Cell(id, DenseVector(x, y), DenseVector(-100, -100), 0.98 * r, solid = true, Motor())
 
   def isol2(id: Int, x: Double, y: Double) = Cell(id, DenseVector(x, y), DenseVector(-10, 10), 1.95 * r, solid = true, Isolant())
 
@@ -53,15 +53,15 @@ object Factory {
 
   def moto2(id: Int, x: Double, y: Double) = Cell(id, DenseVector(x, y), DenseVector(-1, -10), 1.95 * r, solid = true, Motor())
 
-  def x(a: Double) = 2 * r * cos(a)
+  def x(a: Double) = 1.98 * r * cos(a)
 
-  def y(a: Double) = 2 * r * sin(a)
+  def y(a: Double) = 1.98 * r * sin(a)
 
   def x2(a: Double) = 2.6 * r * cos(a)
 
   def y2(a: Double) = 2.6 * r * sin(a)
 
-  def planarian(walls: Seq[Wall]) = Org(-1, 0, 0, 3.5 * r, isol(8, 0, 0) +: Seq(
+  def planarian(walls: Seq[Wall]) = Org(-1, 0, 0, 3.43 * r, isol(8, 0, 0) +: Seq(
     (a: Double) => sens(4, x(a), y(a))
     , (a: Double) => isol(3, x(a), y(a))
     , (a: Double) => sens(5, x(a), y(a))

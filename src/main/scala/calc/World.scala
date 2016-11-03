@@ -35,25 +35,30 @@ case class World(walls: Seq[Wall], orgs: Seq[Org]) {
     }
   }
 
-  def advance(dt: Double): Unit = {
-    val allHits = orgs.par flatMap (_.nextHit(orgs))
-    val quantumCompleted = if (allHits.nonEmpty) {
-      val tmin = allHits.par.minBy(_.t).t
-      val t = min((1 - Cfg.verySmall) * tmin, dt)
-      orgs.par foreach (_.walk(t))
-      if (t < dt) {
-        allHits.par.filter(x => !x.bubbleHit && x.t == tmin) foreach (_.run())
-        advance(dt - t)
-        false
-      } else true
-    } else false
-    if (quantumCompleted)
-      for {bulb <- bulbs} {
-        bulb.lines.clear()
-        for {sensor <- sensors} if (!blocked(sensor, bulb)) {
-          bulb.lineTo(sensor)
-          sensor.energized = true
+  def advance(dt0: Double): Unit = {
+    var dt = dt0
+    var continue = true
+    while (continue) {
+      continue = false
+      val allHits = orgs.par flatMap (_.nextHit(orgs))
+      //      val quantumCompleted =
+      if (allHits.nonEmpty) {
+        val tmin = allHits.par.minBy(_.t).t
+        val t = min((1 - Cfg.verySmall) * tmin, dt)
+        orgs.par foreach (_.walk(t))
+        continue = t < dt
+        if (continue) {
+          allHits.filter(x => !x.bubbleHit && x.t == tmin) foreach (_.run())
+          dt = dt - t
         }
       }
+    }
+    for {bulb <- bulbs} {
+      bulb.lines.clear()
+      for {sensor <- sensors} if (!blocked(sensor, bulb)) {
+        bulb.lineTo(sensor)
+        sensor.energized = true
+      }
+    }
   }
 }
