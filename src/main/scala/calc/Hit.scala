@@ -25,8 +25,8 @@ case class Hit(a: Thing, b: Thing, t: Double, bubbleHit: Boolean = false) {
         a.energized = tmp
       case (Sensor(), Wire()) if a.energized && !b.energized => b.energized = true; a.energized = false
       case (Wire(), Sensor()) if b.energized && !a.energized => a.energized = true; b.energized = false
-      case (Motor(), Wire() | Sensor()) if b.energized => vaiProA += 50d * vaiProAUni; b.energized = false
-      case (Wire() | Sensor(), Motor()) if a.energized => vaiProB += 50d * vaiProBUni; a.energized = false
+      case (Motor(), Wire() | Sensor()) if b.energized => vaiProA += 30d * vaiProAUni; b.energized = false
+      case (Wire() | Sensor(), Motor()) if a.energized => vaiProB += 30d * vaiProBUni; a.energized = false
       case (_, Isolant()) | (Isolant(), _) | (Sensor(), Sensor()) | (Motor(), Motor()) =>
       case (Motor(), Sensor() | Wire()) | (Sensor() | Wire(), Motor()) =>
       case (Sensor(), Wire() | Motor()) | (Wire() | Motor(), Sensor()) =>
