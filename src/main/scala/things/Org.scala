@@ -7,7 +7,7 @@ import calc.{Hit, Phy}
 import data.Cfg
 
 case class Org(id: Int, x: Double, y: Double, r: Double, cells: Seq[Cell], walls: Seq[Wall] = Seq(), intersect:Boolean=true) extends Movable {
-  val bubble = Cell(Int.MinValue, DenseVector(x, y), Cfg.zero, r, solid = false, null)
+  val bubble = Cell(Int.MinValue, DenseVector(x, y), Cfg.zero, r, solid = false, Isolant())
   val all = bubble +: cells
   lazy val (pos, vel) = (meanpos(all), resultantvel)
 

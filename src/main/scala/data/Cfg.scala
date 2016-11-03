@@ -8,7 +8,7 @@ import scala.util.Random
 
 object Cfg {
   val friction = 0.000001
-  val seed = 4223
+  val seed = 422
   val rnd = new Random(seed)
   val norgs = 3
   val (minCells, maxCells) = (5, 25)

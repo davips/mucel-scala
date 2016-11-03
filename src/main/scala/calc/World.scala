@@ -19,14 +19,19 @@ case class World(walls: Seq[Wall], orgs: Seq[Org]) {
     abs(y21 * x0 - x21 * y0 + x2 * y1 - y2 * x1) / sqrt(y21 * y21 + x21 * x21)
   }
 
-  def between(x: Double, a: Double, b: Double) = (x - a) * (x - b) < 0
-
-  def between2d(c: Cell, a: Cell, b: Cell) = between(c.x, a.x, b.x) && between(c.y, a.y, b.y)
+  //  def between(x: Double, a: Double, b: Double) = (x - a) * (x - b) < 0
+  //
+  //  def between2d(c: Cell, a: Cell, b: Cell) = between(c.x, a.x, b.x) && between(c.y, a.y, b.y)
+  def between(c: Cell, a: Cell, b: Cell) = {
+    val ac = a.pos-c.pos
+    val bc = b.pos -c.pos
+    ac.dot(bc) < 0
+  }
 
   def blocked(a: Cell, b: Cell) = {
-    val distTo = distLineToPoint(a.x, a.y, b.x, b.y) _
-    blockers.filter { case ((x, y, r), cells) => distTo(x, y) <= r }.exists { case ((x, y, r), cells) =>
-      cells.exists(c => distTo(c.x, c.y) < c.r && between2d(c, a, b))
+    val margin = distLineToPoint(a.x, a.y, b.x, b.y) _
+    blockers.filter { case ((x, y, r), _) => margin(x, y) <= r }.exists { case ((x, y, r), cells) =>
+      cells.exists(c => margin(c.x, c.y) <= c.r && between(c, a, b))
     }
   }
 

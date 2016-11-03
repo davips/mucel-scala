@@ -20,9 +20,9 @@ object Factory {
     var r = rnd.nextDouble()
     r *= Cfg.maxRad - Cfg.minRad
     r += Cfg.minRad
-    val (so, ty) = rnd.shuffle(Seq(true, false, false, false, false)).head -> rnd.shuffle(Seq.fill(7)(Isolant()) ++ Seq.fill(2)(Wire()) ++ Seq(Motor(), Sensor())).head
+    val (so, ty) = rnd.shuffle(Seq(true, false, false, false, false)).head -> rnd.shuffle(Seq.fill(8)(Isolant()) ++ Seq.fill(3)(Wire()) ++ Seq(Motor(), Sensor())).head
     val cell = Cell(id, pos, vel, r, so || ty == Motor() || ty == Sensor(), ty)
-    cell.energized = ty == Sensor() //&& rnd.nextBoolean()
+    cell.energized = false
     cell
   }
 

@@ -12,28 +12,25 @@ case class Hit(a: Thing, b: Thing, t: Double, bubbleHit: Boolean = false) {
   }
 
   def collide(cella: Cell, cellb: Cell): Unit = {
-    val (ficaNoA, vaiProB, vaiProBuni) = decompose(cella.pos, cellb.pos, cella.vel)
+    val (ficaNoA, vaiProB, vaiProBUni) = decompose(cella.pos, cellb.pos, cella.vel)
     val (ficaNoB, vaiProA, vaiProAUni) = decompose(cellb.pos, cella.pos, cellb.vel)
-    manageMotor(cella, cellb, vaiProB, vaiProBuni)
-    manageMotor(cellb, cella, vaiProA, vaiProAUni)
-    if (!manageEnergy(cella, cellb)) manageEnergy(cellb, cella)
+    manageEnergy(cella, cellb)
     cellb.vel := ficaNoB + vaiProB
     cella.vel := ficaNoA + vaiProA
 
-    def manageMotor(a: Cell, b: Cell, vaiPro: DenseVector[Double], impulse: DenseVector[Double]) =
-      if (a.energized && b.typ == Motor()) {
-        impulse *= 100d
-        vaiPro += impulse
-        a.energized = false
-      }
-    def manageEnergy(a: Cell, b: Cell) = {
-      val manage = a.energized && b.typ == Wire()
-      if (manage) {
-        if (a.typ == Wire()) a.energized = b.energized
-        if (a.typ == Sensor()) a.energized = false
-        b.energized = true
-      }
-      manage
+    def manageEnergy(a: Cell, b: Cell) = (a.typ, b.typ) match {
+      case (Wire(), Wire()) =>
+        val tmp = b.energized
+        b.energized = a.energized
+        a.energized = tmp
+      case (Sensor(), Wire()) if a.energized && !b.energized => b.energized = true; a.energized = false
+      case (Wire(), Sensor()) if b.energized && !a.energized => a.energized = true; b.energized = false
+      case (Motor(), Wire() | Sensor()) if b.energized => vaiProA += 10d * vaiProAUni; b.energized = false
+      case (Wire() | Sensor(), Motor()) if a.energized => vaiProB += 10d * vaiProBUni; a.energized = false
+      case (_, Isolant()) | (Isolant(), _) | (Sensor(), Sensor()) | (Motor(), Motor()) =>
+      case (Motor(), Sensor() | Wire()) | (Sensor() | Wire(), Motor()) =>
+      case (Sensor(), Wire() | Motor()) | (Wire() | Motor(), Sensor()) =>
+      case (Bulb(_), _) | (_, Bulb(_)) =>
     }
   }
 
