@@ -25,6 +25,9 @@ case class Cell(id: Int, pos: DenseVector[Double], vel: DenseVector[Double], r: 
 
   def walk(dt: Double) {
     pos += dt * vel
+    //todo correct to real friction:
+    vel *= Cfg.friction
+
     //sempre que calcula a norma de vel, trava tudo
     //    println(norm(vel))
     //    val nvel = norm(vel)
@@ -44,6 +47,7 @@ case class Cell(id: Int, pos: DenseVector[Double], vel: DenseVector[Double], r: 
     val (x, y, _, r) = getxyvr
     val (lev, intens) = if (!solid) {
       g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.07f))
+      if(typ==Bulb()) g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f))
       0 -> 255
     } else 0 -> 200
     val rndLevel = Random.nextInt(intens)

@@ -1,6 +1,7 @@
 package data
 
 import breeze.linalg.DenseVector
+import breeze.numerics.{cos, sin, sqrt}
 import things._
 
 import scala.util.Random
@@ -27,7 +28,7 @@ object Factory {
   }
 
   def newBulb(walls: Seq[Wall], x: Double = 0, y: Double = 0, r: Double = 5) = {
-    Org(Int.MinValue, x, y, 2 * r, Seq(Cell(1, DenseVector(x, y), Cfg.zero, r, solid = true, Bulb())), walls)
+    Org(Int.MinValue, x, y, 2 * r, Seq(Cell(1, DenseVector(x, y), Cfg.zero, r, solid = false, Bulb())), walls)
   }
 
   def newOrg(rnd: Random, walls: Seq[Wall], intersect: Boolean = true, scale: Double = 1)(id: Int) = {
@@ -37,4 +38,25 @@ object Factory {
     def ncells = rnd.nextInt(Cfg.maxCells - Cfg.minCells) + Cfg.minCells
     Org(id, x, y, r, (1 to ncells) map nc, walls, intersect)
   }
+
+  val r = 15
+
+  def isol(id: Int, x: Double, y: Double) = Cell(id, DenseVector(x, y), DenseVector(-100, 10), 0.95*r, solid = true, Isolant())
+
+  def sens(id: Int, x: Double, y: Double) = Cell(id, DenseVector(x, y), DenseVector(1, -100), 0.95*r, solid = true, Sensor())
+
+  def moto(id: Int, x: Double, y: Double) = Cell(id, DenseVector(x, y), DenseVector(-100, -100), 0.95*r, solid = true, Motor())
+
+  def x(a: Double) = 2 * r * cos(a)
+
+  def y(a: Double) = 2 * r * sin(a)
+
+  def planarian(walls: Seq[Wall]) = Org(-1, 0, 0, 3.5 * r, isol(8, 0, 0) +: Seq(
+     (a: Double) => sens(4, x(a), y(a))
+    , (a: Double) => isol(3, x(a), y(a))
+    , (a: Double) => sens(5, x(a), y(a))
+    , (a: Double) => moto(6, x(a), y(a))
+    , (a: Double) => isol(2, x(a), y(a))
+    , (a: Double) => moto(7, x(a), y(a))
+  ).zip(0 until 6).map { case (f, a) => f(math.Pi * a / 3) }, walls, intersect = false)
 }

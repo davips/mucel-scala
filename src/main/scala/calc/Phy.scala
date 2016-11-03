@@ -10,7 +10,7 @@ object Phy {
       x <- a.cells.filter(_.solid)
       y <- b.cells.filter(_.solid)
     } yield Hit(x, y, timeTo(x, y, sameOrg = false))
-    val tmin = hits.minBy(_.t).t
+    val tmin = if (hits.isEmpty) Double.MaxValue else hits.minBy(_.t).t
     hits filter (_.t == tmin)
   } else Seq(Hit(a, b, timeTo(a.bubble, b.bubble, sameOrg = false), bubbleHit = true))
 
