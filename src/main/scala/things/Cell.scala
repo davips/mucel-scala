@@ -13,7 +13,7 @@ import scala.util.Random
 
 case class Cell(id: Int, pos: DenseVector[Double], vel: DenseVector[Double], r: Double, solid: Boolean, typ: Type) extends Movable {
   var energized = false
-  var lines = mutable.Queue[Line2D](new Line2D.Double(0 + sizex / 2, 0 + sizey / 2, 100 + sizex / 2, 100 + sizey / 2))
+  var lines = mutable.Queue[Line2D]()
 
   def x = pos(0)
 
@@ -24,7 +24,6 @@ case class Cell(id: Int, pos: DenseVector[Double], vel: DenseVector[Double], r: 
   }
 
   def walk(dt: Double) {
-    lines.clear()
     pos += dt * vel
     //sempre que calcula a norma de vel, trava tudo
     //    println(norm(vel))

@@ -47,9 +47,13 @@ case class World(walls: Seq[Wall], orgs: Seq[Org]) {
         false
       } else true
     } else false
-    if (quantumCompleted) for {bulb <- bulbs; sensor <- sensors} if (!blocked(sensor, bulb)) {
-      bulb.lineTo(sensor)
-      sensor.energized = true
-    }
+    if (quantumCompleted)
+      for {bulb <- bulbs} {
+        bulb.lines.clear()
+        for {sensor <- sensors} if (!blocked(sensor, bulb)) {
+          bulb.lineTo(sensor)
+          sensor.energized = true
+        }
+      }
   }
 }
