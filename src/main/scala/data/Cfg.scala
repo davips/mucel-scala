@@ -21,6 +21,5 @@ object Cfg {
   val orgs = Factory.miniPlanarian(walls) +:  Factory.planarian(walls) +: ((1 to Cfg.norgs) map (id => Factory.newOrg(rnd, walls, intersect = false, 1)(id)))
   val world = World(walls, Factory.newBulb(walls,-frameWidth/2, -frameHeight/2, 30) +: orgs)
 
-
   def zero = DenseVector[Double](0, 0)
 }
