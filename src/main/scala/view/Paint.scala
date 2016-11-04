@@ -8,7 +8,9 @@ import data.Cfg
 trait Paint {
   val (sizex, sizey) = Cfg.frameWidth -> Cfg.frameHeight
 
-  def line(g: Graphics2D)(x1: Double, y1: Double, x2: Double, y2: Double) = lineObj(x1, y1, x2, y2)
+  def line(g: Graphics2D)(x1: Double, y1: Double, x2: Double, y2: Double) = {
+    line2(g)(lineObj(x1, y1, x2, y2))
+  }
 
   def line2(g: Graphics2D)(l: Line2D) {
     g.draw(l)

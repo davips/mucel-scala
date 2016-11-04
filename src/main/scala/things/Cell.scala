@@ -1,10 +1,9 @@
 package things
 
-import java.awt.geom.{Ellipse2D, Line2D}
+import java.awt.geom.Line2D
 import java.awt.{AlphaComposite, BasicStroke, Color, Graphics2D}
-import javafx.scene.paint
 
-import breeze.linalg.{DenseVector, norm}
+import breeze.linalg.DenseVector
 import data.Cfg
 
 import scala.collection.mutable
@@ -15,13 +14,13 @@ case class Cell(id: Int, pos: DenseVector[Double], vel: DenseVector[Double], r: 
   var energized = false
   var lines = mutable.Queue[Line2D]()
 
-  def x = pos(0)
-
-  def y = pos(1)
-
   def lineTo(other: Cell): Unit = {
     lines += lineObj(x, y, other.x, other.y)
   }
+
+  def x = pos(0)
+
+  def y = pos(1)
 
   def walk(dt: Double) {
     pos += dt * vel
@@ -47,7 +46,7 @@ case class Cell(id: Int, pos: DenseVector[Double], vel: DenseVector[Double], r: 
     val (x, y, _, r) = getxyvr
     val (lev, intens) = if (!solid) {
       g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.07f))
-      if(typ==Bulb()) g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f))
+      if (typ == Bulb()) g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f))
       0 -> 255
     } else 0 -> 200
     val rndLevel = Random.nextInt(intens)
@@ -59,7 +58,7 @@ case class Cell(id: Int, pos: DenseVector[Double], vel: DenseVector[Double], r: 
       case Motor() => new Color(intens, lev, lev)
       case Isolant() => new Color(intens / 2, lev, intens / 2)
       case Bulb(_) => new Color(255 - dim, 255 - dim, 0)
-      case _ => ???
+      case ty => sys.error(s"cell type $ty not defined")
     }
     g.setColor(color)
     ball(g)(x, y, r)

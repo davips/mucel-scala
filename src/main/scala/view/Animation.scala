@@ -22,10 +22,11 @@ case class Animation(var dt: Double) extends JPanel {
   override def paint(G: Graphics) {
     val canvas = new BufferedImage(Cfg.frameWidth, Cfg.frameHeight, BufferedImage.TYPE_INT_RGB)
     val g = canvas.createGraphics()
+    //    g.scale(0.5,0.5)
     g.setColor(Color.BLACK)
-    g.fillRect(0, 0, canvas.getWidth, canvas.getHeight)
     g.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON)
-    world.orgs ++ world.walls foreach (_.draw(g))
+    g.fillRect(0, 0, canvas.getWidth, canvas.getHeight)
+    world.walls ++ world.orgs foreach (_.draw(g))
 //    println("asd")
     g.dispose()
     //  javax.imageio.ImageIO.write(canvas, "png", new java.io.File("drawing.png"))
