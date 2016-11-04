@@ -45,12 +45,14 @@ Features / To do list
        * [x] ghost (only for internal collisions)
        * [ ] cell eater?
        * [ ] hit absorver?
-       * [ ] separate Sun and bulb concepts 
+       * [ ] add nonpermanent bulbs to organisms (ignites like a motor)
 * [x] sample organisms:
        * [x] planarian (runs from light)
        * [ ] moth (guided by light)
        * [ ] flea (runs towards light)
-* [ ] reproduction (how to combine organisms? through a "reproduction gate"?)
+* [ ] reproduction (how to combine organisms?)
+       * [ ] egg cell? (when two egg cells hit, create an averaged organism)
+       * [ ] reproduction gate?       
 * [ ] improve plausibility of friction
 * [ ] organism editor
 * [ ] energy dissipation on hit? (where does the heat go?)
