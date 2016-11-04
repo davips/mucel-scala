@@ -13,6 +13,7 @@ import scala.util.Random
 case class Cell(id: Int, pos: DenseVector[Double], vel: DenseVector[Double], r: Double, solid: Boolean, typ: Type) extends Movable {
   var energized = false
   var lines = mutable.Queue[Line2D]()
+  var mot = false
 
   def lineTo(other: Cell): Unit = {
     lines += lineObj(x, y, other.x, other.y)
@@ -50,12 +51,13 @@ case class Cell(id: Int, pos: DenseVector[Double], vel: DenseVector[Double], r: 
       0 -> 255
     } else 0 -> 200
     val rndLevel = Random.nextInt(intens)
+    val motf = if (mot) 0.7 else 1
     val color = typ match {
       case Wire() if energized => new Color(0, 55 + dim, 0)
       case Wire() => new Color(lev, intens, lev)
       case Sensor() if energized => new Color(0, 0, 55 + dim)
       case Sensor() => new Color(lev, lev, intens)
-      case Motor() => new Color(intens, lev, lev)
+      case Motor() => new Color((motf * intens).round.toInt, lev, lev)
       case Isolant() => new Color(intens / 2, lev, intens / 2)
       case Bulb(_) => new Color(255 - dim, 255 - dim, 0)
       case ty => sys.error(s"cell type $ty not defined")
