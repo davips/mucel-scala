@@ -36,11 +36,11 @@ sbt run
 ```
 Features / To do list
 =====================
-* [x] 2D particle collision simulator
-* [x] visualization according to real elapsed time
-* [x] exact preemptory collision calculation
-* [x] each organism cells grouped inside an invisible bubble
-* [x] different types of cells: 
+* [x] 2D collision simulator
+* [x] real elapsed time visualization 
+* [x] exact preemptory calculation
+* [x] different types of cells:
+       * [x] bubble (membrane)
        * [x] sensor, bulb, motor, wire
        * [x] ghost (only for internal collisions)
        * [ ] cell eater?
