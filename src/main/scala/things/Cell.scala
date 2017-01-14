@@ -60,7 +60,8 @@ case class Cell(id: Int, pos: DenseVector[Double], vel: DenseVector[Double], r: 
       case Motor() => new Color((motf * intens).round.toInt, lev, lev)
       case Isolant() => new Color(intens / 2, lev, intens / 2)
       case Bulb(_) => new Color(255 - dim, 255 - dim, 0)
-      case ty => sys.error(s"cell type $ty not defined")
+      case Egg() => new Color(200, 200, 200)
+      case ty => sys.error(s"cell type $ty not drawable")
     }
     g.setColor(color)
     ball(g)(x, y, r)

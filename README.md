@@ -36,18 +36,18 @@ sbt run
 ```
 Features / To do list
 =====================
-* [x] 2D particle collision simulator
-* [x] visualization according to real elapsed time
-* [x] exact preemptory collision calculation
-* [x] each organism cells grouped inside an invisible bubble
-* [x] different types of cells: 
+* [x] 2D collision simulator
+* [x] real elapsed time visualization 
+* [x] exact preemptory calculation
+* [x] different types of cells:
+       * [x] bubble (membrane)
        * [x] sensor, bulb, motor, wire
        * [x] ghost (only for internal collisions)
        * [ ] cell eater?
        * [ ] hit absorver?
        * [ ] add nonpermanent bulbs to organisms (ignites like a motor)
 * [x] sample organisms:
-       * [x] planarian (runs from light)
+       * [x] planarian (runs away from light)
        * [ ] moth (guided by light)
        * [ ] flea (runs towards light)
 * [ ] reproduction (how to combine organisms?)

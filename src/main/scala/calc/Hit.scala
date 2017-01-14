@@ -14,23 +14,21 @@ case class Hit(a: Thing, b: Thing, t: Double, bubbleHit: Boolean = false) {
   def collide(cella: Cell, cellb: Cell): Unit = {
     val (ficaNoA, vaiProB, vaiProBUni) = decompose(cella.pos, cellb.pos, cella.vel)
     val (ficaNoB, vaiProA, vaiProAUni) = decompose(cellb.pos, cella.pos, cellb.vel)
-    manageEnergy(cella, cellb)
+    manageEnergyAndReproduction(cella, cellb)
     cellb.vel := ficaNoB + vaiProB
     cella.vel := ficaNoA + vaiProA
 
-    def manageEnergy(a: Cell, b: Cell) = (a.typ, b.typ) match {
-      case (Wire(), Wire()) =>
-        val tmp = b.energized
-        b.energized = a.energized
-        a.energized = tmp
+    def manageEnergyAndReproduction(a: Cell, b: Cell) = (a.typ, b.typ) match {
+      case (Wire(), Wire()) => val tmp = b.energized; b.energized = a.energized; a.energized = tmp
       case (Sensor(), Wire()) if a.energized && !b.energized => b.energized = true; a.energized = false
       case (Wire(), Sensor()) if b.energized && !a.energized => a.energized = true; b.energized = false
       case (Motor(), Wire() | Sensor()) if b.energized => vaiProA += 30d * vaiProAUni; b.energized = false; a.mot = !a.mot
       case (Wire() | Sensor(), Motor()) if a.energized => vaiProB += 30d * vaiProBUni; a.energized = false; b.mot = !b.mot
+      case (Egg(), Egg()) =>
       case (_, Isolant()) | (Isolant(), _) | (Sensor(), Sensor()) | (Motor(), Motor()) =>
       case (Motor(), Sensor() | Wire()) | (Sensor() | Wire(), Motor()) =>
       case (Sensor(), Wire() | Motor()) | (Wire() | Motor(), Sensor()) =>
-      case (Bulb(_), _) | (_, Bulb(_)) =>
+      case (Bulb(_), _) | (_, Bulb(_)) | (Egg(), _) | (_, Egg()) =>
     }
   }
 
