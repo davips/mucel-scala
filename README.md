@@ -34,6 +34,13 @@ Run mucel:
 cd mucel-scala
 sbt run
 ```
+
+Screenshot
+-------------
+![Image](https://github.com/davips/mucel-scala/blob/master/shot.png)
+
+
+
 Features / To do list
 =====================
 * [x] 2D collision simulator
