@@ -40,13 +40,13 @@ case class Cell(id: Int, pos: DenseVector[Double], vel: DenseVector[Double], r: 
     g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f))
     g.setColor(new Color(55 + dim, 55 + dim, 0))
     g.setStroke(new BasicStroke(1f))
-    println(lines.size)
+    //    println(lines.size)
     lines foreach line2(g)
     g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f))
 
     val (x, y, _, r) = getxyvr
     val (lev, intens) = if (!solid) {
-      g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.07f))
+      g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.17f))
       if (typ == Bulb()) g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f))
       0 -> 255
     } else 0 -> 200

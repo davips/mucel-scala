@@ -5,7 +5,7 @@ import breeze.numerics._
 import things._
 
 object Phy {
-  def nextHit(a: Org, b: Org) = if (a.bubble.dist(b.bubble) < a.r + b.r) {
+  def nextHit(a: Elem, b: Elem) = if (a.bubble.dist(b.bubble) < a.r + b.r) {
     val hits = for {
       x <- a.cells.filter(_.solid)
       y <- b.cells.filter(_.solid)
