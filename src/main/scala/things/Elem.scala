@@ -45,7 +45,7 @@ trait Elem extends Movable {
 case class Sun(id: Int, x: Double, y: Double, r: Double, walls: Seq[Wall] = Seq(), intersect: Boolean = true) extends Elem {
   val pos: DenseVector[Double] = DenseVector[Double](x, y)
   val vel: DenseVector[Double] = DenseVector[Double](0, 0)
-  val cells = Seq(Cell(id + 1, DenseVector(x, y), Cfg.zero, r, solid = false, Bulb(permanent = true)))
+  val cells = Seq(Cell(id + 1, DenseVector(x, y), Cfg.zero, r / 2, solid = false, Bulb(permanent = true)))
   val bubble = Cell(Int.MinValue, DenseVector(x, y), Cfg.zero, r, solid = false, Isolant())
 }
 
@@ -65,9 +65,9 @@ case class Org(id: Int, x: Double, y: Double, r: Double, walls: Seq[Wall] = Seq(
     vel := resultantvel
   }
 
-  def meanpos(cells: Seq[Cell]) = cells.map(_.pos).reduce((a, b) => a + b) / cells.length.toDouble
+  def meanpos(cells: Seq[Cell]): DenseVector[Double] = cells.map(_.pos).reduce((a, b) => a + b) / cells.length.toDouble
 
-  def resultantvel = all.map(_.vel).reduce((a, b) => a + b)
+  def resultantvel: DenseVector[Double] = all.map(_.vel).reduce((a, b) => a + b)
 
   private def layer(n: Int) = {
     val da = 2 * math.Pi / n
@@ -79,5 +79,5 @@ case class Org(id: Int, x: Double, y: Double, r: Double, walls: Seq[Wall] = Seq(
     }
   }
 
-  def ve = (rnd.nextDouble() - 0.5) * 200
+  def ve: Double = (rnd.nextDouble() - 0.5) * 200
 }

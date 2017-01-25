@@ -24,7 +24,7 @@ object Cfg {
   val (r, l) = 50 -> 110
   val world = World(walls, Seq(
     //      ,    Org(0, l, 0, r, walls, intersect = false)
-    Sun(Int.MinValue, -500, -500, 2 * r, walls)
+    Sun(Int.MinValue, -50, -50, r / 5, walls)
     , Org(1000, l, l, r, walls, intersect = false)
     , Org(2000, 0, l, r, walls, intersect = false)
     , Org(3000, -l, l, r, walls, intersect = false)
