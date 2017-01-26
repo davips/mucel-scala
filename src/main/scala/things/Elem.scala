@@ -32,9 +32,11 @@ trait Elem extends Movable {
 
   def nextHit(orgs: Seq[Elem]): Seq[Hit] = {
     val pairHits = orgs flatMap (org => if (this.id < org.id) Phy.nextHit(this, org) else Seq())
-    val internalHits = for {a <- all; b <- cells; if a.id < b.id} yield Hit(a, b, Phy.timeTo(a, b, intersect = intersect))
+    //    val internalHits = for {a <- cells; b <- cells; if a.id < b.id} yield Hit(a, b, Phy.timeTo(a, b, intersect = intersect))
+    val internalHits = for {a <- cells; b <- a.neighbors} yield Hit(a, b, Phy.timeTo(a, b, intersect = intersect))
+    val bubbleHits = for {c <- cells} yield Hit(bubble, c, Phy.timeTo(bubble, c, intersect = intersect))
     val wallHits = for {w <- walls} yield Hit(this, w, Phy.timeTo(bubble, w))
-    val allHits = pairHits ++ internalHits ++ wallHits
+    val allHits = pairHits ++ internalHits ++ bubbleHits ++ wallHits
     val tmin = allHits.minBy(_.t).t
     allHits filter (_.t == tmin)
   }
@@ -51,14 +53,23 @@ case class Sun(id: Int, x: Double, y: Double, r: Double, walls: Seq[Wall] = Seq(
 
 case class Org(id: Int, x: Double, y: Double, r: Double, walls: Seq[Wall] = Seq(), intersect: Boolean = true) extends Elem {
   lazy val (pos, vel) = (meanpos(all), resultantvel)
+  val cellR: Double = 0.98 * r / 5
+  val rnd = new Random(id)
   val types = Seq(Wire(), Motor(), Sensor(), Isolant(), Egg())
   // ++Seq(Bulb(false))
   val center = Cell(id + 1, DenseVector(x, y), DenseVector(ve, ve), cellR, rnd.nextBoolean(), types(rnd.nextInt(types.size)))
   val (fstLayer, sndLayer) = (layer(6), layer(12))
+  center.neighbors ++= fstLayer
+  fstLayer.zipWithIndex foreach { case (c, i) =>
+    c.neighbors.enqueue(fstLayer((i + 7) % 6))
+    c.neighbors.enqueue(sndLayer((i * 2 + 11) % 12), sndLayer((i * 2 + 12) % 12), sndLayer((i * 2 + 13) % 12))
+  }
+  sndLayer.zipWithIndex foreach { case (c, i) =>
+    c.neighbors.enqueue(sndLayer((i + 13) % 12))
+  }
   val cells: Seq[Cell] = Seq(center) ++ fstLayer ++ sndLayer
+  cells foreach (x => println(x.neighbors.size))
   val bubble: Cell = Cell(Int.MinValue, DenseVector(x, y), Cfg.zero, r, solid = false, Isolant())
-  private val cellR = 0.98 * r / 5
-  private val rnd = new Random(id)
 
   def update(): Unit = {
     pos := meanpos(all)

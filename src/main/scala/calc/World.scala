@@ -14,14 +14,15 @@ case class World(walls: Seq[Wall], orgs: Seq[Elem]) {
     var continue = true
     while (continue) {
       continue = false
-      val allHits = orgs.par flatMap (_.nextHit(orgs))
+      val allHits = orgs flatMap (_.nextHit(orgs))
       //      val quantumCompleted =
       if (allHits.nonEmpty) {
-        if (allHits.size > 1) println(allHits.size)
-        val tmin = allHits.par.minBy(_.t).t
+        //        if (allHits.size > 1) println(allHits.size)
+        val tmin = allHits.minBy(_.t).t
         //        val t = min(tmin, dt)
         val t = min((1 - Cfg.verySmall) * tmin, dt)
-        orgs.par foreach (_.walk(t))
+        //        println(s"${(1000000000*tmin).round/1000000d}")
+        orgs foreach (_.walk(t))
         continue = t < dt
         if (continue) {
           allHits.filter(x => !x.bubbleHit && x.t == tmin) foreach (_.run())

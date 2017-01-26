@@ -7,12 +7,12 @@ import breeze.linalg.DenseVector
 import data.Cfg
 
 import scala.collection.mutable
-import scala.util.Random
 
 
 case class Cell(id: Int, pos: DenseVector[Double], vel: DenseVector[Double], r: Double, solid: Boolean, typ: Type) extends Movable {
+  val neighbors: mutable.Queue[Cell] = mutable.Queue()
+  val lines: mutable.Queue[Line2D] = mutable.Queue()
   var energized = false
-  var lines = mutable.Queue[Line2D]()
   var mot = false
 
   def lineTo(other: Cell): Unit = {
@@ -50,7 +50,7 @@ case class Cell(id: Int, pos: DenseVector[Double], vel: DenseVector[Double], r: 
       if (typ == Bulb()) g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f))
       0 -> 255
     } else 0 -> 200
-    val rndLevel = Random.nextInt(intens)
+    //    val rndLevel = Random.nextInt(intens)
     val motf = if (mot) 0.7 else 1
     val color = typ match {
       case Wire() if energized => new Color(0, 55 + dim, 0)
