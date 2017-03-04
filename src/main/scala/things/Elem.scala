@@ -52,7 +52,7 @@ case class Sun(id: Int, x: Double, y: Double, r: Double, walls: Seq[Wall] = Seq(
 }
 
 case class Org(id: Int, x: Double, y: Double, r: Double, walls: Seq[Wall] = Seq(), intersect: Boolean = true) extends Elem {
-  lazy val (pos, vel) = (meanpos(all), resultantvel)
+  lazy val (pos, vel) = (null: DenseVector[Double], resultantvel)
   val cellR: Double = 0.98 * r / 5
   val rnd = new Random(id)
   val types = Seq(Wire(), Motor(), Sensor(), Isolant(), Egg())
