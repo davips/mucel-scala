@@ -27,7 +27,7 @@ case class World(walls: Seq[Wall], orgs: Seq[Elem]) {
         if (continue) {
           allHits.filter(x => !x.bubbleHit && x.t == tmin) foreach (_.run())
           //          allHits.find(x => !x.bubbleHit && x.t == tmin).get.run()
-          dt = dt - t
+          dt -= t
         }
       }
     }

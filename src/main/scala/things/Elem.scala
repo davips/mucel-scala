@@ -56,10 +56,13 @@ case class Org(id: Int, x: Double, y: Double, r: Double, walls: Seq[Wall] = Seq(
   val cellR: Double = 0.98 * r / 5
   val rnd = new Random(id)
   val types = Seq(Wire(), Motor(), Sensor(), Isolant(), Egg())
+
+  //  val center = makeCenter(0)
   // ++Seq(Bulb(false))
-  val center = Cell(id + 1, DenseVector(x, y), DenseVector(ve, ve), cellR, rnd.nextBoolean(), types(rnd.nextInt(types.size)))
-  val (fstLayer, sndLayer) = (layer(6), layer(12))
-  center.neighbors ++= fstLayer
+  def makeCenter(n: Int) = Cell(id + 50 + n, DenseVector(x, y), DenseVector(ve, ve), cellR, rnd.nextBoolean(), types(rnd.nextInt(types.size)))
+
+  val (fstLayer, sndLayer) = (makeLayer(6), makeLayer(12))
+  //  center.neighbors ++= fstLayer
   fstLayer.zipWithIndex foreach { case (c, i) =>
     c.neighbors.enqueue(fstLayer((i + 7) % 6))
     c.neighbors.enqueue(sndLayer((i * 2 + 11) % 12), sndLayer((i * 2 + 12) % 12), sndLayer((i * 2 + 13) % 12))
@@ -67,7 +70,8 @@ case class Org(id: Int, x: Double, y: Double, r: Double, walls: Seq[Wall] = Seq(
   sndLayer.zipWithIndex foreach { case (c, i) =>
     c.neighbors.enqueue(sndLayer((i + 13) % 12))
   }
-  val cells: Seq[Cell] = Seq(center) ++ fstLayer ++ sndLayer
+  val cells: Seq[Cell] = fstLayer ++ sndLayer
+  //  val cells: Seq[Cell] = Seq(center) ++ fstLayer ++ sndLayer
   cells foreach (x => println(x.neighbors.size))
   val bubble: Cell = Cell(Int.MinValue, DenseVector(x, y), Cfg.zero, r, solid = false, Isolant())
 
@@ -80,7 +84,7 @@ case class Org(id: Int, x: Double, y: Double, r: Double, walls: Seq[Wall] = Seq(
 
   def resultantvel: DenseVector[Double] = all.map(_.vel).reduce((a, b) => a + b)
 
-  private def layer(n: Int) = {
+  private def makeLayer(n: Int) = {
     val da = 2 * math.Pi / n
     val pau = 1.01 * cellR * n / 3
     (0 until n) map { i =>
