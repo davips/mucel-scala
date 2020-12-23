@@ -1,5 +1,5 @@
 # mucel
-Minimalist multicellular simulator.
+Minimalistic multicellular simulator.
 The idea is similar to the Game Of Life, i.e. a minimal set of rules sufficient to generate life-like behavior.
 In the present case, the world is also 2D but not discrete.
  
